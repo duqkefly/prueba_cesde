@@ -4,21 +4,28 @@ Aplicación web para administrar los cursos y docentes de Cesde.
 
 ## Base de datos
 
-Uso MariaDB (también funciona con MySQL). Primero hay que crear la base de datos:
+Uso MariaDB (también funciona con MySQL). El script con la base de datos y las tablas está en `database/cesde.sql`:
 
-```sql
-CREATE DATABASE cesde CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```bash
+mysql -u root -p < database/cesde.sql
 ```
-
-Las tablas no hace falta crearlas, se generan solas cuando se levanta el backend.
 
 El proyecto se conecta con estos datos:
 
-- Usuario: `root`
-- Contraseña: vacía
+- Base de datos: `cesde`
+- Usuario: `duqkefly`
+- Contraseña: `manutd10`
 - Puerto: `3306`
 
-Si en su equipo el usuario root tiene contraseña, se puede cambiar en `backend/src/main/resources/application.properties` o pasarla al ejecutar (ver abajo).
+Si el usuario no existe en su equipo se puede crear así:
+
+```sql
+CREATE USER 'duqkefly'@'localhost' IDENTIFIED BY 'manutd10';
+GRANT ALL PRIVILEGES ON cesde.* TO 'duqkefly'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+Si prefiere usar otro usuario se cambia en `backend/src/main/resources/application.properties`.
 
 ## Backend
 
@@ -30,11 +37,5 @@ cd backend
 ```
 
 En Windows es `mvnw.cmd spring-boot:run`.
-
-Si root tiene contraseña:
-
-```bash
-DB_PASSWORD=su_clave ./mvnw spring-boot:run
-```
 
 La API queda corriendo en `http://localhost:8080`.
