@@ -14,9 +14,20 @@ btnPrueba.addEventListener('click', async () => {
   }
 });
 
-async function cargarCursos() {
-  const res = await fetch(`${API}/cursos`);
-  const cursos = await res.json();
+// Datos de prueba mientras conecto las tablas con la API
+const cursosMock = [
+  { nombre: 'Logica de programacion', descripcion: 'Algoritmos y diagramas de flujo', duracionSemanas: 6, precio: 450000, fechaInicio: '2026-10-05T18:00:00', docenteNombre: 'Andres Morales' },
+  { nombre: 'Java basico', descripcion: 'Sintaxis, clases y objetos', duracionSemanas: 10, precio: 800000, fechaInicio: '2026-10-19T08:00:00', docenteNombre: 'Andres Morales' },
+  { nombre: 'HTML y CSS', descripcion: 'Maquetacion de paginas web', duracionSemanas: 4, precio: 350000, fechaInicio: '2026-11-02T14:00:00', docenteNombre: 'Paula Restrepo' }
+];
+
+const docentesMock = [
+  { nombre: 'Andres Morales', documento: '1020304050', correo: 'andres.morales@cesde.edu.co' },
+  { nombre: 'Paula Restrepo', documento: '43987654', correo: 'paula.restrepo@cesde.edu.co' }
+];
+
+function cargarCursos() {
+  const cursos = cursosMock;
   console.log('cursos', cursos);
 
   tablaCursos.innerHTML = '';
@@ -33,9 +44,8 @@ async function cargarCursos() {
   });
 }
 
-async function cargarDocentes() {
-  const res = await fetch(`${API}/docentes`);
-  const docentes = await res.json();
+function cargarDocentes() {
+  const docentes = docentesMock;
   console.log('docentes', docentes);
 
   tablaDocentes.innerHTML = '';
