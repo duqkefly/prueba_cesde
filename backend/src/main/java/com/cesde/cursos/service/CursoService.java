@@ -1,5 +1,6 @@
 package com.cesde.cursos.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -25,8 +26,18 @@ public class CursoService {
     }
 
     @Transactional(readOnly = true)
-    public List<CursoDTO> listar() {
-        return cursoRepository.findAll().stream().map(this::toDTO).toList();
+    public List<CursoDTO> listar(String nombre, LocalDate desde, LocalDate hasta) {
+        List<Curso> cursos;
+
+        if (nombre != null && !nombre.isBlank()) {
+            cursos = cursoRepository.findByNombreContainingIgnoreCase(nombre);
+        } else if (desde != null && hasta != null) {
+            cursos = cursoRepository.findByFechaInicioBetween(desde.atStartOfDay(), hasta.atTime(23, 59, 59));
+        } else {
+            cursos = cursoRepository.findAll();
+        }
+
+        return cursos.stream().map(this::toDTO).toList();
     }
 
     @Transactional
@@ -58,6 +69,13 @@ public class CursoService {
         curso.setFechaInicio(dto.fechaInicio());
         curso.setDocente(docente);
         return toDTO(cursoRepository.save(curso));
+    }
+
+    public void eliminar(Long id) {
+        if (!cursoRepository.existsById(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el curso con id " + id);
+        }
+        cursoRepository.deleteById(id);
     }
 
     private CursoDTO toDTO(Curso curso) {
