@@ -28,7 +28,8 @@
     <div class="tab-content">
       <div class="tab-pane fade show active" id="tabCursos">
         <form id="formCurso" class="card card-body mb-3">
-          <h5>Nuevo curso</h5>
+          <h5>Curso</h5>
+          <input type="hidden" id="cursoId">
           <div class="row g-2">
             <div class="col-md-4">
               <input type="text" id="cursoNombre" class="form-control" placeholder="Nombre">
@@ -64,6 +65,7 @@
                 <th>Precio</th>
                 <th>Fecha inicio</th>
                 <th>Docente</th>
+                <th></th>
               </tr>
             </thead>
             <tbody id="tablaCursos"></tbody>
@@ -73,7 +75,8 @@
 
       <div class="tab-pane fade" id="tabDocentes">
         <form id="formDocente" class="card card-body mb-3">
-          <h5>Nuevo docente</h5>
+          <h5>Docente</h5>
+          <input type="hidden" id="docenteId">
           <div class="row g-2">
             <div class="col-md-4">
               <input type="text" id="docenteNombre" class="form-control" placeholder="Nombre">
@@ -97,6 +100,7 @@
                 <th>Nombre</th>
                 <th>Documento</th>
                 <th>Correo</th>
+                <th></th>
               </tr>
             </thead>
             <tbody id="tablaDocentes"></tbody>

@@ -7,6 +7,9 @@ const formCurso = document.getElementById('formCurso');
 const formDocente = document.getElementById('formDocente');
 const selectDocente = document.getElementById('cursoDocente');
 
+let cursos = [];
+let docentes = [];
+
 // btnPrueba.addEventListener('click', async () => {
 //   try {
 //     const res = await fetch(`${API}/prueba`);
@@ -31,7 +34,7 @@ const selectDocente = document.getElementById('cursoDocente');
 
 async function cargarCursos() {
   const res = await fetch(`${API}/cursos`);
-  const cursos = await res.json();
+  cursos = await res.json();
   console.log('cursos', cursos);
 
   tablaCursos.innerHTML = '';
@@ -44,13 +47,14 @@ async function cargarCursos() {
         <td>$ ${Number(curso.precio).toLocaleString('es-CO')}</td>
         <td>${new Date(curso.fechaInicio).toLocaleString('es-CO')}</td>
         <td>${curso.docenteNombre}</td>
+        <td><button class="btn btn-warning btn-sm" onclick="editarCurso(${curso.id})">Editar</button></td>
       </tr>`;
   });
 }
 
 async function cargarDocentes() {
   const res = await fetch(`${API}/docentes`);
-  const docentes = await res.json();
+  docentes = await res.json();
   console.log('docentes', docentes);
 
   tablaDocentes.innerHTML = '';
@@ -61,9 +65,30 @@ async function cargarDocentes() {
         <td>${docente.nombre}</td>
         <td>${docente.documento}</td>
         <td>${docente.correo}</td>
+        <td><button class="btn btn-warning btn-sm" onclick="editarDocente(${docente.id})">Editar</button></td>
       </tr>`;
     selectDocente.innerHTML += `<option value="${docente.id}">${docente.nombre}</option>`;
   });
+}
+
+// Pasa los datos de la fila al formulario para editarlos
+function editarDocente(id) {
+  const docente = docentes.find(d => d.id === id);
+  document.getElementById('docenteId').value = docente.id;
+  document.getElementById('docenteNombre').value = docente.nombre;
+  document.getElementById('docenteDocumento').value = docente.documento;
+  document.getElementById('docenteCorreo').value = docente.correo;
+}
+
+function editarCurso(id) {
+  const curso = cursos.find(c => c.id === id);
+  document.getElementById('cursoId').value = curso.id;
+  document.getElementById('cursoNombre').value = curso.nombre;
+  document.getElementById('cursoDescripcion').value = curso.descripcion;
+  document.getElementById('cursoDuracion').value = curso.duracionSemanas;
+  document.getElementById('cursoPrecio').value = curso.precio;
+  document.getElementById('cursoFecha').value = curso.fechaInicio.slice(0, 16);
+  selectDocente.value = curso.docenteId;
 }
 
 formDocente.addEventListener('submit', async (e) => {
@@ -75,14 +100,20 @@ formDocente.addEventListener('submit', async (e) => {
     correo: document.getElementById('docenteCorreo').value
   };
 
-  await fetch(`${API}/docentes`, {
-    method: 'POST',
+  // Si hay id es edicion, si no es uno nuevo
+  const id = document.getElementById('docenteId').value;
+  const url = id ? `${API}/docentes/${id}` : `${API}/docentes`;
+
+  await fetch(url, {
+    method: id ? 'PUT' : 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(docente)
   });
 
   formDocente.reset();
+  document.getElementById('docenteId').value = '';
   cargarDocentes();
+  cargarCursos();
 });
 
 formCurso.addEventListener('submit', async (e) => {
@@ -97,13 +128,17 @@ formCurso.addEventListener('submit', async (e) => {
     docenteId: selectDocente.value
   };
 
-  await fetch(`${API}/cursos`, {
-    method: 'POST',
+  const id = document.getElementById('cursoId').value;
+  const url = id ? `${API}/cursos/${id}` : `${API}/cursos`;
+
+  await fetch(url, {
+    method: id ? 'PUT' : 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(curso)
   });
 
   formCurso.reset();
+  document.getElementById('cursoId').value = '';
   cargarCursos();
 });
 

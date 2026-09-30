@@ -44,6 +44,22 @@ public class CursoService {
         return toDTO(cursoRepository.save(curso));
     }
 
+    @Transactional
+    public CursoDTO actualizar(Long id, CursoDTO dto) {
+        Curso curso = cursoRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el curso con id " + id));
+        Docente docente = docenteRepository.findById(dto.docenteId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe el docente con id " + dto.docenteId()));
+
+        curso.setNombre(dto.nombre());
+        curso.setDescripcion(dto.descripcion());
+        curso.setDuracionSemanas(dto.duracionSemanas());
+        curso.setPrecio(dto.precio());
+        curso.setFechaInicio(dto.fechaInicio());
+        curso.setDocente(docente);
+        return toDTO(cursoRepository.save(curso));
+    }
+
     private CursoDTO toDTO(Curso curso) {
         return new CursoDTO(
                 curso.getId(),
