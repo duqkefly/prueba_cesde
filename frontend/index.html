@@ -3,12 +3,62 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Prueba Bootstrap</title>
+  <title>Cesde - Cursos</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-  <div class="container py-5">
-    <button type="button" id="btnPrueba" class="btn btn-primary">Probar conexión</button>
+  <nav class="navbar navbar-dark bg-primary">
+    <div class="container">
+      <span class="navbar-brand">Cesde - Gestión de cursos</span>
+    </div>
+  </nav>
+
+  <div class="container py-4">
+    <button type="button" id="btnPrueba" class="btn btn-outline-secondary btn-sm mb-3">Probar conexión</button>
+
+    <ul class="nav nav-tabs mb-3">
+      <li class="nav-item">
+        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tabCursos">Cursos</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tabDocentes">Docentes</button>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane fade show active" id="tabCursos">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Semanas</th>
+                <th>Precio</th>
+                <th>Fecha inicio</th>
+                <th>Docente</th>
+              </tr>
+            </thead>
+            <tbody id="tablaCursos"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="tab-pane fade" id="tabDocentes">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Nombre</th>
+                <th>Documento</th>
+                <th>Correo</th>
+              </tr>
+            </thead>
+            <tbody id="tablaDocentes"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
