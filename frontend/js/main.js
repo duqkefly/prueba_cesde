@@ -1,21 +1,33 @@
 const API = 'http://localhost:8080/api';
 
-const btnPrueba = document.getElementById('btnPrueba');
+// const btnPrueba = document.getElementById('btnPrueba');
 const tablaCursos = document.getElementById('tablaCursos');
 const tablaDocentes = document.getElementById('tablaDocentes');
 const formCurso = document.getElementById('formCurso');
 const formDocente = document.getElementById('formDocente');
 const selectDocente = document.getElementById('cursoDocente');
 
-btnPrueba.addEventListener('click', async () => {
-  try {
-    const res = await fetch(`${API}/prueba`);
-    const data = await res.json();
-    alert(`${data.mensaje}\nDocentes: ${data.docentes}\nCursos: ${data.cursos}`);
-  } catch (error) {
-    alert('No hay conexion con el backend');
-  }
-});
+// btnPrueba.addEventListener('click', async () => {
+//   try {
+//     const res = await fetch(`${API}/prueba`);
+//     const data = await res.json();
+//     alert(`${data.mensaje}\nDocentes: ${data.docentes}\nCursos: ${data.cursos}`);
+//   } catch (error) {
+//     alert('No hay conexion con el backend');
+//   }
+// });
+
+// Datos de prueba que use antes de conectar con la API
+// const cursosMock = [
+//   { nombre: 'Logica de programacion', descripcion: 'Algoritmos y diagramas de flujo', duracionSemanas: 6, precio: 450000, fechaInicio: '2026-10-05T18:00:00', docenteNombre: 'Andres Morales' },
+//   { nombre: 'Java basico', descripcion: 'Sintaxis, clases y objetos', duracionSemanas: 10, precio: 800000, fechaInicio: '2026-10-19T08:00:00', docenteNombre: 'Andres Morales' },
+//   { nombre: 'HTML y CSS', descripcion: 'Maquetacion de paginas web', duracionSemanas: 4, precio: 350000, fechaInicio: '2026-11-02T14:00:00', docenteNombre: 'Paula Restrepo' }
+// ];
+//
+// const docentesMock = [
+//   { nombre: 'Andres Morales', documento: '1020304050', correo: 'andres.morales@cesde.edu.co' },
+//   { nombre: 'Paula Restrepo', documento: '43987654', correo: 'paula.restrepo@cesde.edu.co' }
+// ];
 
 async function cargarCursos() {
   const res = await fetch(`${API}/cursos`);
@@ -79,7 +91,7 @@ formCurso.addEventListener('submit', async (e) => {
   const curso = {
     nombre: document.getElementById('cursoNombre').value,
     descripcion: document.getElementById('cursoDescripcion').value,
-    duracionSemana: document.getElementById('cursoDuracion').value,
+    duracionSemanas: document.getElementById('cursoDuracion').value,
     precio: document.getElementById('cursoPrecio').value,
     fechaInicio: document.getElementById('cursoFecha').value,
     docenteId: selectDocente.value
