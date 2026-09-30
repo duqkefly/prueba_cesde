@@ -3,6 +3,9 @@ const API = 'http://localhost:8080/api';
 const btnPrueba = document.getElementById('btnPrueba');
 const tablaCursos = document.getElementById('tablaCursos');
 const tablaDocentes = document.getElementById('tablaDocentes');
+const formCurso = document.getElementById('formCurso');
+const formDocente = document.getElementById('formDocente');
+const selectDocente = document.getElementById('cursoDocente');
 
 btnPrueba.addEventListener('click', async () => {
   try {
@@ -14,20 +17,9 @@ btnPrueba.addEventListener('click', async () => {
   }
 });
 
-// Datos de prueba mientras conecto las tablas con la API
-const cursosMock = [
-  { nombre: 'Logica de programacion', descripcion: 'Algoritmos y diagramas de flujo', duracionSemanas: 6, precio: 450000, fechaInicio: '2026-10-05T18:00:00', docenteNombre: 'Andres Morales' },
-  { nombre: 'Java basico', descripcion: 'Sintaxis, clases y objetos', duracionSemanas: 10, precio: 800000, fechaInicio: '2026-10-19T08:00:00', docenteNombre: 'Andres Morales' },
-  { nombre: 'HTML y CSS', descripcion: 'Maquetacion de paginas web', duracionSemanas: 4, precio: 350000, fechaInicio: '2026-11-02T14:00:00', docenteNombre: 'Paula Restrepo' }
-];
-
-const docentesMock = [
-  { nombre: 'Andres Morales', documento: '1020304050', correo: 'andres.morales@cesde.edu.co' },
-  { nombre: 'Paula Restrepo', documento: '43987654', correo: 'paula.restrepo@cesde.edu.co' }
-];
-
-function cargarCursos() {
-  const cursos = cursosMock;
+async function cargarCursos() {
+  const res = await fetch(`${API}/cursos`);
+  const cursos = await res.json();
   console.log('cursos', cursos);
 
   tablaCursos.innerHTML = '';
@@ -44,11 +36,13 @@ function cargarCursos() {
   });
 }
 
-function cargarDocentes() {
-  const docentes = docentesMock;
+async function cargarDocentes() {
+  const res = await fetch(`${API}/docentes`);
+  const docentes = await res.json();
   console.log('docentes', docentes);
 
   tablaDocentes.innerHTML = '';
+  selectDocente.innerHTML = '<option value="">Seleccione el docente</option>';
   docentes.forEach(docente => {
     tablaDocentes.innerHTML += `
       <tr>
@@ -56,8 +50,50 @@ function cargarDocentes() {
         <td>${docente.documento}</td>
         <td>${docente.correo}</td>
       </tr>`;
+    selectDocente.innerHTML += `<option value="${docente.id}">${docente.nombre}</option>`;
   });
 }
+
+formDocente.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const docente = {
+    nombre: document.getElementById('docenteNombre').value,
+    documento: document.getElementById('docenteDocumento').value,
+    correo: document.getElementById('docenteCorreo').value
+  };
+
+  await fetch(`${API}/docentes`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(docente)
+  });
+
+  formDocente.reset();
+  cargarDocentes();
+});
+
+formCurso.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const curso = {
+    nombre: document.getElementById('cursoNombre').value,
+    descripcion: document.getElementById('cursoDescripcion').value,
+    duracionSemana: document.getElementById('cursoDuracion').value,
+    precio: document.getElementById('cursoPrecio').value,
+    fechaInicio: document.getElementById('cursoFecha').value,
+    docenteId: selectDocente.value
+  };
+
+  await fetch(`${API}/cursos`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(curso)
+  });
+
+  formCurso.reset();
+  cargarCursos();
+});
 
 cargarCursos();
 cargarDocentes();

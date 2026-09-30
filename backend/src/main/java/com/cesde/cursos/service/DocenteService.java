@@ -21,6 +21,14 @@ public class DocenteService {
         return docenteRepository.findAll().stream().map(this::toDTO).toList();
     }
 
+    public DocenteDTO crear(DocenteDTO dto) {
+        Docente docente = new Docente();
+        docente.setNombre(dto.nombre());
+        docente.setDocumento(dto.documento());
+        docente.setCorreo(dto.correo());
+        return toDTO(docenteRepository.save(docente));
+    }
+
     private DocenteDTO toDTO(Docente docente) {
         return new DocenteDTO(docente.getId(), docente.getNombre(), docente.getDocumento(), docente.getCorreo());
     }

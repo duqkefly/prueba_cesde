@@ -2,8 +2,12 @@ package com.cesde.cursos.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cesde.cursos.dto.CursoDTO;
@@ -22,5 +26,11 @@ public class CursoController {
     @GetMapping
     public List<CursoDTO> listar() {
         return cursoService.listar();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public CursoDTO crear(@RequestBody CursoDTO dto) {
+        return cursoService.crear(dto);
     }
 }
